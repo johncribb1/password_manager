@@ -37,9 +37,8 @@ def password_combination():
         symbol_choice = eval(symbol_choice.title())
         return [digit_choice, letter_choice, symbol_choice]
 
-    except NameError as e:
-        print("Invalid value. Use either True or False")
-        print("Invalidity returns a default, try again to regenerate")
+    except NameError:
+        print("Invalid value. Use either True or False.  Has defauted to generation of True, True, True")
 
     return [True, True, True]
 

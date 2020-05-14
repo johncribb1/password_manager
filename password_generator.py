@@ -3,17 +3,17 @@ import string
 import random
 
 #Declare window height and width variables for use later
-height = 500
-width = 600
+height = 720
+width = 405
 
 
 #Application beginning
 root = tk.Tk()
-root.title('Password Generator - John Cribb')
+root.title('PassHash - Password Generator')
 canvas = tk.Canvas(root, height=height, width=width)
 canvas.pack()
 
-frame1 = tk.Frame(root, bg='#5B78FF')
+frame1 = tk.Frame(canvas, bg='#F8FAFF')
 frame1.place(relheight="1", relwidth="1")
 
 #functions
@@ -50,44 +50,55 @@ def user_choice(value):
     user_choice += symbols if value[2] else ''
     return user_choice
 
+
 def run_generator():
     if __name__ == '__main__':
         choice_list = password_combination()
         password = password_generator(choice_list, length.get())
-        passwordchoice = tk.Label(frame2, text=password)
+        passwordchoice = tk.Label(frame2, text='\n' + password + '\n', bg='#FFFFFF', fg='#595959', font='Roboto')
         passwordchoice.pack()
+        keep_button = tk.Button(frame2, text="Keep Password", bg='#F8FAFF', fg='#595959', font='Roboto')
+        keep_button.pack()
+        
     else:
-        passwordchoice = tk.Label(frame2, text='Not run from main file, security breach.')
+        passwordchoice = tk.Label(frame2, text='Not run from main file, security breach.', bg='#F8FAFF', fg='#595959', font='Roboto')
         passwordchoice.pack()
     
+#Banner
+banner_frame = tk.Frame(frame1, bg='#54A7FC')
+banner_frame.place(relheight="0.1", relwidth="1")
+title_banner = tk.Label(banner_frame, text='PassHash - Password Generator', bg='#54A7FC', fg='#FFFFFF', font='roboto')
+title_banner.place(relx="0", rely="0", relheight="1", relwidth="1")
+
 #Main Frame
-frame2 = tk.Frame(frame1, bg="#eeeeee")
-frame2.place(relx="0.1", rely="0.1", relheight="0.8", relwidth="0.8")
+frame2 = tk.Frame(frame1, bg="#F8FAFF")
+frame2.place(relx="0", rely="0.1", relheight="0.9", relwidth="1")
 
 #Length Entry
 password_lengths = list(range(8,33))
 length = tk.IntVar()
 length.set(password_lengths[7])
 dropdown = tk.OptionMenu(frame2, length, *password_lengths)
+dropdown.config(activebackground='#F8FAFF', activeforeground='#595959',bg='#F8FAFF', fg='#595959', font='Roboto')
 dropdown.pack()
 
 #Check Buttons
 number_check = tk.StringVar()
-checkbox1 = tk.Checkbutton(frame2, text='Include Numbers?', variable=number_check, onvalue='True', offvalue='False')
+checkbox1 = tk.Checkbutton(frame2, text='Include Numbers?', variable=number_check, onvalue='True', offvalue='False', bg='#F8FAFF', fg='#595959', font='Roboto')
 checkbox1.select()
 checkbox1.pack()
 letter_check = tk.StringVar()
-checkbox2 = tk.Checkbutton(frame2, text='Include Letters?', variable=letter_check, onvalue='True', offvalue='False')
+checkbox2 = tk.Checkbutton(frame2, text='Include Letters?', variable=letter_check, onvalue='True', offvalue='False', bg='#F8FAFF', fg='#595959', font='Roboto')
 checkbox2.select()
 checkbox2.pack()
 symbol_check = tk.StringVar()
-checkbox3 = tk.Checkbutton(frame2, text='Include Symbols?', variable=symbol_check, onvalue='True', offvalue='False')
+checkbox3 = tk.Checkbutton(frame2, text='Include Symbols?', variable=symbol_check, onvalue='True', offvalue='False', bg='#F8FAFF', fg='#595959', font='Roboto')
 checkbox3.select()
 checkbox3.pack()
 
 #Button
-generate_button = tk.Button(frame2, text="Generate Password", command=run_generator)
-generate_button.pack(side='bottom')
+generate_button = tk.Button(frame2, text="Generate Password", bg='#F8FAFF', fg='#595959', font='Roboto', command=run_generator)
+generate_button.pack()
 
 
 root.mainloop()

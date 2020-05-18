@@ -87,13 +87,21 @@ class PassHashApp(tk.Tk):
         username_info = username.get().encode('UTF-8')
         password_info = password.get().encode('UTF-8')
         
+        sec_key = ''
+        for i in password.get():
+            char = chr(ord(i) - 20)
+            sec_key += char
+        
+        
+
         hashed = bcrypt.hashpw(password_info, bcrypt.gensalt())
 
         file = open(username_info, 'wb')
-        #file.write(username_info)
         file.write(hashed)
-        #file.write(password_info)
         file.close()
+        file2 = open(username.get() + 'li', 'w')
+        file2.write(str(sec_key))
+        file2.close()
 
         user_entry.delete(0, 100)
         pass_entry.delete(0, 100)
@@ -123,6 +131,41 @@ class PassHashApp(tk.Tk):
         else:
             user_message.set('User Not Found')
 
+    def readfile(self, frame):
+        f = open('paulli', 'r')
+        count = 0
+
+        for line in f:
+            entityList = line.split(',')
+            
+            website = entityList[0]
+            login = entityList[1]
+            password = entityList[2]
+
+            website_decrypt = ''
+            login_decrypt = ''
+            password_decrypt = ''
+
+            for letter in website:
+                string = chr(ord(letter) + 12)
+                website_decrypt += string
+
+            for letter in login:
+                string = chr(ord(letter) + 12)
+                login_decrypt += string
+
+            for letter in password:
+                string = chr(ord(letter) + 12)
+                password_decrypt += string
+
+            website = tk.Label(frame, text=website_decrypt, bg=app_color) 
+            website.grid(row=2 + count, sticky='w')
+            login = tk.Label(frame, text=login_decrypt, bg=app_color) 
+            login.grid(row=2 + count, column=1)
+            password = tk.Label(frame, text=password_decrypt, bg=app_color)
+            password.grid(row=2 + count, column=2, sticky='e')
+            count += 1
+        f.close()
 
 
 class RegisterPage(tk.Frame):
@@ -151,13 +194,12 @@ class RegisterPage(tk.Frame):
         back_button = ttk.Button(self, text='Back To Login', command=lambda: controller.show_frame(LoginPage))
         back_button.pack(side='bottom', pady=10)
 
-        
-
 class LoginPage(tk.Frame):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
         
         self.configure(bg=app_color)
+    
 
         label = tk.Label(self, text='Welcome to PassHash\n All Your Passwords \n SECURE', font=PAGE_FONT, bg=app_color)
         label.pack(pady=20, padx=20)
@@ -205,7 +247,6 @@ class StartPage(tk.Frame):
         button2.pack(pady=10, padx=20)
         button3 = ttk.Button(self, text='Nothing - Yet')
         button3.pack(pady=10, padx=20)
-
 
 class PasswordGenerator(tk.Frame):
     def __init__(self, parent, controller):
@@ -258,13 +299,24 @@ class PasswordVault(tk.Frame):
         tk.Frame.__init__(self, parent)
 
         self.configure(bg=app_color)
-
-        label = tk.Label(self, text='Your Password Vault', font=PAGE_FONT)
+        
+        label = tk.Label(self, text='Your Password Vault', font=PAGE_FONT, bg=app_color)
         label.pack(pady=10, padx=10)
+        frame1 = ttk.Frame(self, height=350, width=200)
+        frame1.pack()
+        entity_label = tk.Label(frame1, text='Your Passwords', bg=app_color)
+        entity_label.grid(columnspan=3, row=0)
+        website_label = tk.Label(frame1, text='Website: ', bg=app_color)
+        login_label = tk.Label(frame1, text='Login: ', bg=app_color)
+        password_label = tk.Label(frame1, text='Password: ', bg=app_color)
+        website_label.grid(row=1)
+        login_label.grid(row=1, column=1)
+        password_label.grid(row=1, column=2)
+
+        controller.readfile(frame1)
 
         home_button = ttk.Button(self, text='Back to Home', command=lambda: controller.show_frame(StartPage))
-        home_button.pack(side='bottom')
-
+        home_button.pack(side='bottom', pady=10)
 
 class SetPassPage(tk.Frame):
     def __init__(self, parent, controller):
@@ -277,6 +329,7 @@ class SetPassPage(tk.Frame):
 
         home_button = ttk.Button(self, text='Back to Home', command=lambda: controller.show_frame(StartPage))
         home_button.pack(side='bottom')
+
 
 app = PassHashApp()
 app.geometry('252x448')

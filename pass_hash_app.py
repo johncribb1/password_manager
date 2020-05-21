@@ -5,9 +5,12 @@ import os
 import string
 import random
 
+app_color = '#dbedff'
+banner_color = '#0060c7'
+PAGE_FONT = ('Roboto', 12)
+PAGE_FONT2 = ('Roboto', 10)
+entry_box_size = 25
 
-app_color = '#ffffff'
-PAGE_FONT = ('Roboto')
 #Gaining all the letters and numbers for generating our passwords
 letters_up_and_down = string.ascii_letters
 numbers = string.digits
@@ -19,6 +22,7 @@ class PassHashApp(tk.Tk):
         tk.Tk.__init__(self, *args, **kwargs)
 
         tk.Tk.wm_title(self, 'PassHash - Password Manager')
+
 
         self.logged_in = tk.StringVar()
 
@@ -202,22 +206,28 @@ class RegisterPage(tk.Frame):
         username = tk.StringVar()
         password = tk.StringVar()
 
-        user_label = tk.Label(self, text='Username', font=PAGE_FONT, bg=app_color)
+        user_label = tk.Label(self, text='Username', font=PAGE_FONT2, bg=app_color)
         user_label.pack()
         user_entry = ttk.Entry(self, textvariable=username)
-        user_entry.pack()
-        pass_label = tk.Label(self, text='Password', font=PAGE_FONT, bg=app_color)
+        user_entry.pack(pady=10)
+        pass_label = tk.Label(self, text='Password', font=PAGE_FONT2, bg=app_color)
         pass_label.pack()
         pass_entry = ttk.Entry(self, textvariable=password)
         pass_entry.pack(pady=10)
 
         reg_button = ttk.Button(self, text='Register', command=lambda: controller.reg_user(username, password, user_entry, pass_entry, register_message))
-        reg_button.pack()
+        reg_button.pack(pady=(10,10))
+
+        logo = tk.PhotoImage(file='images/lock3.png')
+        lock_label = tk.Label(self, image=logo, width=100, height=100, bg=app_color)
+        lock_label.photo = logo
+        lock_label.pack()
+
         back_button = ttk.Button(self, text='Back To Login', command=lambda: controller.show_frame(LoginPage))
         back_button.pack(side='bottom', pady=10)
 
         register_message = tk.StringVar()
-        success_label = tk.Label(self, textvariable=register_message, font=PAGE_FONT, bg=app_color)
+        success_label = tk.Label(self, textvariable=register_message, font=PAGE_FONT2, bg=app_color)
         success_label.pack()
 
 class LoginPage(tk.Frame):
@@ -225,25 +235,33 @@ class LoginPage(tk.Frame):
         tk.Frame.__init__(self, parent)
         
         self.configure(bg=app_color)
-    
+        banner = tk.Frame(self, bg=banner_color)
+        banner.pack(side='top', fill='x')
 
-        label = tk.Label(self, text='Welcome to PassHash\n All Your Passwords \n SECURE', font=PAGE_FONT, bg=app_color)
-        label.pack(pady=20, padx=20)
+        label = tk.Label(banner, text='Welcome to PassHash\n All Your Passwords \n SECURE', font=PAGE_FONT, bg=banner_color)
+        label.pack()
 
-        label = tk.Label(self, text='Please enter your login details below', font=PAGE_FONT, bg=app_color)
+        label = tk.Label(self, text='Please enter your login details below:', font=PAGE_FONT2, bg=app_color)
         label.pack()
 
         username = tk.StringVar()
         password = tk.StringVar()
 
-        user_label = tk.Label(self, text='Username', font=PAGE_FONT, bg=app_color)
-        user_label.pack()
-        user_entry = ttk.Entry(self, textvariable=username)
+        user_label = tk.Label(self, text='Username', font=PAGE_FONT2, bg=app_color)
+        user_label.pack(pady=(10,0))
+        user_entry = ttk.Entry(self, textvariable=username, width=entry_box_size)
         user_entry.pack()
-        pass_label = tk.Label(self, text='Password', bg=app_color, font=PAGE_FONT)
+        pass_label = tk.Label(self, text='Password', bg=app_color, font=PAGE_FONT2)
         pass_label.pack()
-        pass_entry = ttk.Entry(self, textvariable=password)
-        pass_entry.pack(pady=10)
+        pass_entry = ttk.Entry(self, textvariable=password, show="*", width=entry_box_size)
+        pass_entry.pack(pady=(0,10))
+
+        
+        logo = tk.PhotoImage(file='images/lock3.png')
+        lock_label = tk.Label(self, image=logo, width=100, height=100, bg=app_color)
+        lock_label.photo = logo
+        lock_label.pack()
+        
 
         button1 = ttk.Button(self, text='Login', command=lambda: controller.login_verify(username, password, user_entry, pass_entry, user_message))
         button1.pack(pady=10, padx=20)
